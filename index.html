@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Carbon</title>
+  <link rel="stylesheet" href="css/xterm.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.5/xterm.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-auth.js"></script>
+  <script src="https://unpkg.com/monaco-editor@0.8.3/min/vs/loader.js"></script>
+  <!-- <script src="https://replit.com/public/js/repl-auth-v2.js"></script> -->
+  <link href="css/style.css" rel="stylesheet" type="text/css" />
+  <link href="css/vscode.css" rel="stylesheet" type="text/css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+
+<body onload="init()">
+  <header class="header">
+    <p>Carbon Code</p>
+
+
+    <div class="left">
+      <button onclick="commit()"><span class="material-icons" style="margin-right: 9px;">
+          commit
+        </span>commit this file</button>
+
+      <img id="user_image">
+    </div>
+  </header>
+  <section class="editor">
+    <div class="navbar nav-1">
+      <span id="run-icon" class="material-icons" style="
+    background: #a674ff;
+    color: white;
+">
+        play_arrow
+      </span>
+
+      <span id="file-icon" class="material-icons" onclick="fileNav()">
+        folder
+      </span>
+
+      <span id="find-icon" class="material-icons" onclick="findNav()">
+        search
+      </span>
+      <span id="issue-icon" class="material-icons" onclick="issueNav()">
+        bug_report
+      </span>
+      <span id="setting-icon" class="material-icons" onclick="settingNav()">
+        settings
+      </span>
+      <span id="support-icon" class="material-icons" onclick="support()">
+        support
+      </span>
+          <span id="terminal-icon" class="material-icons" onclick="edit_code()">
+terminal
+</span>
+
+
+
+
+    </div>
+
+    <div class="nav-util">
+      <ul id="filetree"></ul>
+      <div id="find-nav">
+        <header class="find-header">
+          <p> Search</p>
+          <div class="find-input">
+            <input type="text" id="find-input" placeholder="search ....">
+            <span class="material-icons" onclick="find()">search</span>
+          </div>
+        </header>
+        <br>
+        <p>Results</p>
+        <div id="find-logger"></div>
+      </div>
+      <div id="issue-nav">
+        <header class="issue-header">
+          <p>Issue</p>
+          <div class="issue-input">
+            <div>
+              <input id="issue-title" type="text" placeholder="Title">
+              <textarea id="issue-body" placeholder="describe issue ..."></textarea>
+            </div>
+            <button onclick="issue()">Create
+            </button>
+          </div>
+        </header>
+        <p>Issues</p>
+        <div id="issue-logger" style="
+"></div>
+      </div>
+      <div id="setting-nav">
+        <div style="margin-bottom:20px;">
+          <p>Settings</p>
+          <button onclick="apply()">Apply</button>
+        </div>
+        <div>
+          <p>Font size</p>
+          <select id="size-picker">
+            <option>tiny</option>
+            <option>normal</option>
+            <option>huge</option>
+            <option>large</option>
+          </select>
+        </div>
+        <div>
+          <p>Language</p>
+          <select id="language-picker">
+            <option>abap</option>
+            <option>aes</option>
+            <option>apex</option>
+            <option>azcli</option>
+            <option>bat</option>
+            <option>bicep</option>
+            <option>c</option>
+            <option>cameligo</option>
+            <option>clojure</option>
+            <option>coffeescript</option>
+            <option>cpp</option>
+            <option>csharp</option>
+            <option>csp</option>
+            <option>css</option>
+            <option>cypher</option>
+            <option>dart</option>
+            <option>dockerfile</option>
+            <option>ecl</option>
+            <option>elixir</option>
+            <option>flow9</option>
+            <option>freemarker2</option>
+            <option>freemarker2.tag-angle.interpolation-bracket</option>
+            <option>freemarker2.tag-angle.interpolation-dollar</option>
+            <option>freemarker2.tag-auto.interpolation-bracket</option>
+            <option>freemarker2.tag-auto.interpolation-dollar</option>
+            <option>freemarker2.tag-bracket.interpolation-bracket</option>
+            <option>freemarker2.tag-bracket.interpolation-dollar</option>
+            <option>fsharp</option>
+            <option>go</option>
+            <option>graphql</option>
+            <option>handlebars</option>
+            <option>hcl</option>
+            <option>html</option>
+            <option>ini</option>
+            <option>java</option>
+            <option>javascript</option>
+            <option>json</option>
+            <option>julia</option>
+            <option>kotlin</option>
+            <option>less</option>
+            <option>lexon</option>
+            <option>liquid</option>
+            <option>lua</option>
+            <option>m3</option>
+            <option>markdown</option>
+            <option>mips</option>
+            <option>msdax</option>
+            <option>mysql</option>
+            <option>objective-c</option>
+            <option>pascal</option>
+            <option>pascaligo</option>
+            <option>perl</option>
+            <option>pgsql</option>
+            <option>php</option>
+            <option>pla</option>
+            <option>plaintext</option>
+            <option>postiats</option>
+            <option>powerquery</option>
+            <option>powershell</option>
+            <option>proto</option>
+            <option>pug</option>
+            <option>python</option>
+            <option>qsharp</option>
+            <option>r</option>
+            <option>razor</option>
+            <option>redis</option>
+            <option>redshift</option>
+            <option>restructuredtext</option>
+            <option>ruby</option>
+            <option>rust</option>
+            <option>sb</option>
+            <option>scala</option>
+            <option>scheme</option>
+            <option>scss</option>
+            <option>shell</option>
+            <option>sol</option>
+            <option>sparql</option>
+            <option>sql</option>
+            <option>st</option>
+            <option>swift</option>
+            <option>systemverilog</option>
+            <option>tcl</option>
+            <option>twig</option>
+            <option>typescript</option>
+            <option>vb</option>
+            <option>verilog</option>
+            <option>xml</option>
+            <option>yaml</option>
+          </select>
+        </div>
+        <div>
+          <p>Minimap</p>
+          <label class="switch">
+            <input type="checkbox" id="minimap-picker">
+            <span class="slider round"></span>
+          </label>
+        </div>
+      
+        <div>
+          <p>Word wrap</p>
+          <label class="switch">
+            <input type="checkbox" id="wordwrap-picker">
+            <span class="slider round"></span>
+          </label>
+        </div>
+        <div>
+          <p>Beautify</p>
+          <button>Beautify</button>
+        </div>
+        <div>
+          <p>Minify</p>
+          <button>Minify</button>
+        </div>
+        <div>
+          <p>Delete Source</p>
+          <button style="
+    background: #fd7979;
+">Delete</button>
+        </div>
+
+      </div>
+    </div>
+
+
+    <div class="editor-container">
+      <div class="tabs" id="tabs"></div>
+      <div id="editor">
+
+      </div>
+       <div id="terminal"></div>
+   
+   
+    </div>
+
+
+  </section>
+  <script src="js/script.js"></script>
+  <script src="js/editor.js"></script>
+  <script src="js/xterm.js"></script>
+  <script src="js/func.js"></script>
+</body>
+
+</html>
